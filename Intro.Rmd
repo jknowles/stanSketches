@@ -1,0 +1,29 @@
+Learning How to Use Stan to fit Bayesian Models
+========================================================
+
+My notes from using `stan` and `rstan` to fit Bayesian models. 
+
+# Setup
+
+Generate some data of known correlations and sizes
+Estimate simple regression models
+Look at performance of `stan`
+
+```{r}
+library(datasynthR)
+library(rstan)
+library(glmer2stan)
+set_cppo(mode = c("fast"))
+library(lme4)
+
+X <- genNumeric(500, 3, 0.2)
+Y <- X[,1] * 2 + X[,2] * -1 + X[,3] * 4 + rnorm(500)
+
+dat <- cbind(X, Y)
+dat <- data.frame(dat)
+names(dat) <- c("x1", "x2", "x3", "y")
+
+M1 <- lm(y ~ x1 + x2 + x3, data=dat)
+M1_stan <- glmer2stan(y~ x1 + x2 + x3, data=dat)
+
+```
